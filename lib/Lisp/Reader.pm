@@ -54,12 +54,12 @@ sub read
 	    pos($_) = $old_pos + $pos;
 	    push(@$form, [symbol("quote"), $subform]);
 	    last if $one && !@stack;
+	} elsif (/\G\s*\./gc) {
+	    print "${indent}DOT\n" if $DEBUG;
 	} elsif (/\G\s*([^\s();]+)/gc) {
 	    print "${indent}SYMBOL $1\n" if $DEBUG;
 	    push(@$form, symbol($1));
 	    last if $one && !@stack;
-	} elsif (/\G\s*\./gc) {
-	    print "${indent}DOT\n" if $DEBUG;
 	} elsif (/\G\s*(.)/gc) {
 	    print "${indent}? $1\n";
 	} else {
