@@ -55,7 +55,7 @@ sub new
                       @$marks
                      }
                   : undef;
-        $_->[4] = undef if $server == $nil;
+        $_->[4] = undef if defined($server) && $server == $nil;
 	$_->[5] = @$para ? { map { $_->[0]->name, $_->[1] } @$para } : undef;
 
 	# trim trailing undef values
