@@ -8,14 +8,14 @@ use Lisp::Symbol      qw(symbol);
 use Lisp::Subr::All;  # make builtins available
 
 use Getopt::Std;
-use vars qw($opt_d $opt_f);
+use vars qw($opt_v $opt_f);
 
-unless (getopts("df:")) {
+unless (getopts("vf:")) {
     $0 =~ s,.*/,,;
-    die "Usage: $0 [-d] [-f <file>] <forms>...\n";
+    die "Usage: $0 [-v] [-f <file>] <forms>...\n";
 }
 
-$Lisp::Interpreter::DEBUG++ if $opt_d;
+$Lisp::Interpreter::DEBUG++ if $opt_v;
 
 
 $text = "";
