@@ -1,4 +1,4 @@
-print "1..8\n";
+print "1..9\n";
 
 use Lisp::Reader  qw(lisp_read);
 use Lisp::Printer qw(lisp_print);
