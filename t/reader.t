@@ -1,9 +1,9 @@
 print "1..2\n";
 
-use Lisp::Reader;
-use Lisp::Printer;
+use Lisp::Reader  qw(lisp_read);
+use Lisp::Printer qw(lisp_print);
 
-$form = Lisp::Reader::read("a b (a b)");
+$form = lisp_read("a b (a b)");
 
 print "not " unless @$form == 3 &&
                     $form->[0]->name eq "a" &&
@@ -11,7 +11,7 @@ print "not " unless @$form == 3 &&
                     $form->[2][0]->name eq "a";
 print "ok 1\n";
 
-print Lisp::Printer::print($form), "\n";
-print "not " unless Lisp::Printer::print($form) eq "(a b (a b))";
+print lisp_print($form), "\n";
+print "not " unless lisp_print($form) eq "(a b (a b))";
 print "ok 2\n";
 
