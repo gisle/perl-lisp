@@ -28,8 +28,8 @@ sub print
 sub eval
 {
     my $self = shift;
-    require Lisp::Eval;
-    Lisp::Eval::eval($self);
+    require Lisp::Interpreter;
+    Lisp::Interpreter::eval($self);
 }
 
 1;
