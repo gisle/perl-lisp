@@ -1,7 +1,8 @@
 package Lisp::Reader;
 
 use strict;
-use vars qw($DEBUG $SYMBOLS_AS_STRINGS @EXPORT_OK $VERSION);
+use vars qw($DEBUG $SYMBOLS_AS_STRINGS $NIL_AS_SYMBOL
+            @EXPORT_OK $VERSION);
 
 $VERSION = sprintf("%d.%02d", q$Revision$ =~ /(\d+)\.(\d+)/);
 
@@ -14,7 +15,9 @@ require Exporter;
 
 sub my_symbol
 {
-    $SYMBOLS_AS_STRINGS ? $_[0] : symbol($_[0]);
+    ($_[0] eq "nil" && !$NIL_AS_SYMBOL) ?
+      undef : 
+      ($SYMBOLS_AS_STRINGS ? $_[0] : symbol($_[0]));
 }
 
 sub lisp_read
@@ -45,6 +48,10 @@ sub lisp_read
 		bless $form, "Lisp::Vector" if $1 eq "[";
 	    } else {
 		last unless @stack;
+		if (ref($form) eq "ARRAY" && @$form == 0) {
+                    # () and nil is supposed to be the same thing
+		    $stack[-1][-1] = my_symbol("nil");
+		}
 		$form = pop(@stack);
 		last if $one && !@stack;
 	    }
