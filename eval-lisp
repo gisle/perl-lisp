@@ -1,0 +1,9 @@
+#!/usr/bin/perl -w
+
+use Lisp::Reader;
+use Lisp::Printer;
+use Lisp::Eval;
+
+my $form = Lisp::Reader::read(join(" ", @ARGV));
+my $res = Lisp::Eval::eval($form);
+print Lisp::Printer::print($res), "\n";
