@@ -8,7 +8,7 @@ structure that represents the Lisp objects.  For instance
 
 Ends up as the following perl structure.
 
- [symbol("foo"), "foo", [symbol("+") 42]]
+ [symbol("foo"), "foo", [symbol("+"), 42]]
 
 Once I had this I just had to produce a Lisp printer, i.e. something
 that takes structure like the one above and returns the textual lisp
