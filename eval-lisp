@@ -1,10 +1,6 @@
 #!/usr/bin/perl -w
 
-use Lisp::Reader      qw(lisp_read);
-use Lisp::Printer     qw(lisp_print);
-use Lisp::Interpreter qw(lisp_eval);
-use Lisp::Symbol      qw(symbol);
-
+use Lisp::Interpreter qw(lisp_read_eval_print);
 use Lisp::Subr::All;  # make builtins available
 
 use Getopt::Std;
@@ -17,18 +13,36 @@ unless (getopts("vf:")) {
 
 $Lisp::Interpreter::DEBUG++ if $opt_v;
 
+if ($opt_f || @ARGV) {
+    my $text = "";
+    $text = `cat $opt_f` if $opt_f;
+    if (@ARGV) {
+	$text .= "@ARGV";
+    }
+    print lisp_read_eval_print($text), "\n";
+} else {
+    #local($/) = ".";
+    lisp_read_eval_print(<<'EOT');
+         ;; Set up some helper functions
+         (defun q () (write "Goodbye!") (exit))
+         (fset 'quit (symbol-function 'q))
+EOT
 
-$text = "";
-$text = `cat $opt_f` if $opt_f;
-
-if (@ARGV) {
-    $text .= "@ARGV";
+    my $bold = `tput bold 2>/dev/null`;
+    my $norm = `tput rmso 2>/dev/null`;
+    my $prompt = "${bold}p-lisp>$norm ";
+    print $prompt;
+    while (<STDIN>) {
+	next if /^\s*$/;
+	eval {
+	    print lisp_read_eval_print($_), "\n";
+	};
+	if ($@) {
+	    $@ =~ s/ at \S+ line \d+// unless $opt_v;
+	    print "\aException: $@";
+	}
+    } continue {
+	print $prompt;
+    }
+    print "\n";
 }
-
-my $form = lisp_read($text);
-unshift(@$form, symbol("progn")) if ref($form->[0]) eq "ARRAY";
-
-#print lisp_print($form), "\n";
-
-my $res = lisp_eval($form);
-print lisp_print($res), "\n";

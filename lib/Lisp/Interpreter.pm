@@ -8,7 +8,7 @@ use Lisp::Printer qw(lisp_print);
 
 require Exporter;
 *import = \&Exporter::import;
-@EXPORT_OK = qw(lisp_eval);
+@EXPORT_OK = qw(lisp_eval lisp_read_eval_print);
 
 my $macro  = symbol("macro");
 my $lambda = symbol("lambda");
@@ -122,6 +122,15 @@ sub lambda  # calling a lambda expression
 	$pc++;
     }
     $res;
+}
+
+
+sub lisp_read_eval_print
+{
+    require Lisp::Reader;
+    my $form = Lisp::Reader::lisp_read(join(" ", @_));
+    unshift(@$form, symbol("progn")) if ref($form->[0]) eq "ARRAY";
+    lisp_print(lisp_eval($form));
 }
 
 1;
