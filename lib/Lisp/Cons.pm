@@ -17,7 +17,7 @@ sub cons
 
 sub consp
 {
-    UNIVERSAL::isa($_[0], "Lisp::Cons");
+    UNIVERSAL::isa($_[0], "Lisp::Cons") || ref($_[0]) eq "ARRAY";
 }
 
 sub new

@@ -26,7 +26,7 @@ sub lisp_print
 	    $str = $obj->name;
 	} elsif (vectorp($obj)) {
 	    $str = "[" . join(" ", map lisp_print($_), @$obj) . "]";
-	} elsif (consp($obj)) {
+	} elsif (ref($obj) eq "Lisp::Cons") {
 	    $str = "(" .join(" . ", map lisp_print($_), @$obj). ")";
 	} elsif (ref($obj) eq "ARRAY") {
 	    $str = "(" . join(" ", map lisp_print($_), @$obj) . ")";
