@@ -1,3 +1,33 @@
+1997-10-19   Gisle Aas <aas@sn.no>
+
+   Release 0.04
+
+   Lisp::Interpreter provide lisp_read_eval_print()
+
+   The 'eval-lisp' utility can read from <STDIN>
+
+   Gnus::Newsrc_eld works again.
+
+   Lisp::Special provide make_special() and specialp()
+
+   Lisp::Reader update:
+       - nil and () now represented as undef, unless $NIL_AS_SYMBOL
+         is true.
+
+       - More complete recognition of characters ?\015 ?\M-\C-X
+
+       - Escaped characters in strings
+
+   $symbol->as_string;
+
+   Lisp::Symbols::dump_symbols()
+
+   $VERSION variable in most modules
+
+   More tests
+
+
+
 1997-10-17   Gisle Aas <aas@sn.no>
 
    Release 0.03
