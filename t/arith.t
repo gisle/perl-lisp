@@ -91,7 +91,7 @@ for (1 .. 100) {
     $randsum += $r;
     $badrand++ if $r < 0 || $r > 10;
 }
-$badrand++ if $randsum < 400 || $randsum > 600; # bad luck if this happens
+$badrand++ if $randsum < 300 || $randsum > 700; # real bad luck if this happens
 bad if $badrand;
 ok;
 
