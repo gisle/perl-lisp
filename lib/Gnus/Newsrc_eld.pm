@@ -1,8 +1,11 @@
 package Gnus::Newsrc_eld;
 
 use strict;
+use vars qw($VERSION);
 
-use Lisp::Reader ();
+$VERSION = sprintf("%d.%02d", q$Revision$ =~ /(\d+)\.(\d+)/);
+
+use Lisp::Reader qw(lisp_read);
 use Lisp::Symbol qw(symbol symbolp);
 
 
@@ -14,7 +17,7 @@ sub new
     open(LISP, $file) || die "Can't open $file: $!";
     my $lisp = <LISP>;
     close(LISP);
-    my $form = Lisp::Reader::read($lisp);
+    my $form = lisp_read($lisp);
 
     my $self = bless {}, $class;
 
@@ -37,22 +40,26 @@ sub new
 	}
     }
 
-    use Data::Dumper;
-
     my $nil = symbol("nil");
+    # make the 'gnus-newsrc-alist' into a more perl suitable structure
     for (@{$self->{'gnus-newsrc-alist'}}) {
 	my($group, $level, $read, $marks, $server, $para) = @$_;
 
-	for ($read, $marks, $server, $para) {
-	    $_ = [] if $_ == $nil;
+	for ($read, $marks, $para) {
+	    $_ = [] if !defined($_) || $_ == $nil;
 	}
-
 	$_->[2] = join(",", map {ref($_)?"$_->[0]-$_->[1]":$_} @$read);
-	$_->[3] = { map {shift(@$_)->name =>
-		        join(",", map {ref($_)?"$_->[0]-$_->[1]":$_}@$_)}
-                   @$marks
-                 };
-	$_->[5] = { map { $_->[0]->name, $_->[1] } @$para };
+	$_->[3] = @$marks ?
+                     { map {shift(@$_)->name =>
+		            join(",", map {ref($_)?"$_->[0]-$_->[1]":$_}@$_)}
+                      @$marks
+                     }
+                  : undef;
+        $_->[4] = undef if $server == $nil;
+	$_->[5] = @$para ? { map { $_->[0]->name, $_->[1] } @$para } : undef;
+
+	# trim trailing undef values
+	pop(@$_) until defined($_->[-1]) || @$_ == 0;
     }
 
     $self;
