@@ -232,7 +232,7 @@ __END__
 
 =head1 SEE ALSO
 
-L<Lisp::Reader>, L<Set::IntSpan>, http://www.gnus.org
+L<Set::IntSpan>, http://www.gnus.org
 
 =head1 COPYRIGHT
 
