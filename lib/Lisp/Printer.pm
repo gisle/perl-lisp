@@ -7,7 +7,7 @@ use Lisp::Cons   qw(consp);
 sub dump
 {
     require Data::Dumper;
-    Dumper($_[0]);
+    Data::Dumper::Dumper($_[0]);
 }
 
 sub print
