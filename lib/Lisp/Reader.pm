@@ -61,7 +61,7 @@ sub lisp_read
 	    print "${indent}NUMBER $1\n" if $DEBUG;
 	    push(@$form, $1+0);
 	    last if $one && !@stack;
-	} elsif (/\G\s*\?((?:\\[A-Z]-)*(?:\\\^.|\\[0-7]{1,3}|\\.|.))/gc) {
+	} elsif (/\G\s*\?((?:\\[A-Z]-)*(?:\\\^.|\\[0-7]{1,3}|\\.|.))/sgc) {
 	    print "${indent}CHAR $1\n" if $DEBUG;
 	    push(@$form, parse_char($1));
 	    last if $one && !@stack;
@@ -69,7 +69,7 @@ sub lisp_read
 		 \"(                           # start quote
 		    [^\"\\]*                   # unescaped
 		    (?:\\.[^\"\\]*)*           # (escaped char + unescaped)*
-		 )\"/gcx)                      # end quote
+		 )\"/gcxs)                     # end quote
 	{
 	    my $str = $1;
 
@@ -97,7 +97,7 @@ sub lisp_read
 	} elsif (/\G\s*
                    (  [^\s()\[\];\\]*          # unescaped plain chars
                       (?:\\.[^\s()\[\];\\]*)*  # (escaped char + unescaped)*
-                   )/gcx
+                   )/gcsx
 		 && length($1))
 	{
 	    # symbols can have space and parentesis embedded if they are
