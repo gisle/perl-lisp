@@ -38,8 +38,6 @@ bless sub {
 );
 
 
-symbol("p")->function(sub{print join("\n", (map Lisp::Printer::print($_), @_), "")});
-
 symbol("let")->function(
 bless
 sub {
@@ -97,5 +95,12 @@ sub {
 
 symbol("put")->function(sub{$_[0]->put($_[1] => $_[2])});
 symbol("get")->function(sub{$_[0]->get($_[1])});
+
+
+symbol("print")->function(sub{Lisp::Printer::print($_[0])});
+symbol("read")->function(sub{Lisp::Reader::read($_[0])});
+
+symbol("write")->function(sub{print join("\n", (map Lisp::Printer::print($_), @_), "")});
+
 
 1;
