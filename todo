@@ -1,13 +1,17 @@
-Implement macros.
+# $Id$
 
 Lisp::String for strings while numbers are plain scalars.  This might
 also be an Lisp::Reader option.
 
 Pretty-Printer version of Lisp::Printer::print
 
-Reading (a b . c) should work, also (a . nil)
+Reading (a b . c) should work, also (a . nil) and (a . (b . nil))
 
-Complete binding of perl builtins.
+Implement macros.
+
+More core subrs.
+
+Complete the bindings of perl builtins.
 
 Figure out how to call perl builtins in array context from Lisp.
 
