@@ -26,7 +26,9 @@ sub print
 	}
     } else {
 	# XXX: need real number/string type info
-	if ($obj =~ /^[+-]?\d+(?:\.\d*)?$/) {
+	if (!defined($obj)) {
+	    $str = "nil";
+	} elsif ($obj =~ /^[+-]?\d+(?:\.\d*)?$/) {
 	    # number
 	    $str = $obj + 0;
 	} else {
