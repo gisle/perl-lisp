@@ -28,7 +28,7 @@ if ($opt_f || @ARGV) {
          (fset 'quit (symbol-function 'q))
 EOT
 
-    my $bold = `tput bold 2>/dev/null`;
+    my $bold = `tput smso 2>/dev/null`;
     my $norm = `tput rmso 2>/dev/null`;
     my $prompt = "${bold}p-lisp>$norm ";
     print $prompt;
