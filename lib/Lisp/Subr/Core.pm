@@ -124,7 +124,7 @@ symbol("while")->function(
 	}));
 
 # numeric functions
-symbol("floatp")->function(sub {$_[0] =~ /float/ ? $t : $nil }); #XXX
+symbol("floatp")->function(sub {$_[0] =~ /^[-+]?(?:\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?$/ ? $t : $nil });
 symbol("integerp")->function(sub {$_[0] =~ /^\d+$/ ? $t : $nil });
 symbol("numberp")->function(symbol("floatp")->function);
 symbol("zerop")->function(sub {$_[0] == 0 ? $t : $nil });
