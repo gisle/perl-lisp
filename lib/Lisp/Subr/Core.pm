@@ -79,7 +79,7 @@ sub {
 }, "Lisp::Special");
 
 
-sub lisp_not { not lisp_true($_[0]) }
+sub lisp_not { lisp_true($_[0]) ? $nil : $t }
 
 symbol("not" )->function(\&lisp_not);
 symbol("null")->function(\&lisp_not);
