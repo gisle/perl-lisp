@@ -1,9 +1,10 @@
-print "1..2\n";
+print "1..8\n";
 
 use Lisp::Reader  qw(lisp_read);
 use Lisp::Printer qw(lisp_print);
 use Lisp::Symbol  qw(symbolp symbol);
 use Lisp::Cons    qw(consp);
+use Lisp::Vector  qw(vectorp);
 
 $form = lisp_read("a b (a b)");
 
@@ -95,3 +96,9 @@ print "not " unless @$form == 5 &&
 		    $form->[4][1] == 10;
 print "ok 7\n";
 
+$form = lisp_read(q([a b [a (b c)] (a b)]));
+print lisp_print($form), "\n";
+print "not " unless @$form == 1 &&
+                    vectorp($form->[0]) &&
+                    @{$form->[0]} == 4;
+print "ok 8\n";
