@@ -3,7 +3,10 @@ package Lisp::Subr::Core;
 # implements the core subrs
 
 use strict;
-use Lisp::Symbol qw(symbol);
+use Lisp::Symbol      qw(symbol);
+use Lisp::Reader      qw(lisp_read);
+use Lisp::Printer     qw(lisp_print);
+use Lisp::Interpreter qw(lisp_eval);
 
 my $lambda = symbol("lambda");
 my $nil    = symbol("nil");
@@ -19,7 +22,7 @@ sub {
 
 symbol("set")->function(sub {$_[0]->value($_[1]); $_[1]} );
 symbol("quote")->function(bless sub {$_[0]}, "Lisp::Special");
-symbol("setq")->function(bless sub{my $val = Lisp::Interpreter::eval($_[1]); $_[0]->value($val); $val}, "Lisp::Special");
+symbol("setq")->function(bless sub{my $val = lisp_eval($_[1]); $_[0]->value($val); $val}, "Lisp::Special");
 
 symbol("progn")->function(sub {$_[-1]});
 symbol("prog1")->function(sub {$_[0]});
@@ -64,7 +67,7 @@ sub {
 
    my $res;
    for (@_) {
-       $res = Lisp::Interpreter::eval($_);
+       $res = lisp_eval($_);
    }
    $res;
 }, "Lisp::Special");
@@ -88,7 +91,7 @@ sub {
    }
    my $res;
    for (@_) {
-       $res = Lisp::Interpreter::eval($_);
+       $res = lisp_eval($_);
    }
    $res;
 }, "Lisp::Special");
@@ -97,10 +100,10 @@ symbol("put")->function(sub{$_[0]->put($_[1] => $_[2])});
 symbol("get")->function(sub{$_[0]->get($_[1])});
 
 
-symbol("print")->function(sub{Lisp::Printer::print($_[0])});
-symbol("read")->function(sub{Lisp::Reader::read($_[0])});
+symbol("print")->function(sub{lisp_print($_[0])});
+symbol("read")->function(sub{lisp_read($_[0])});
 
-symbol("write")->function(sub{print join("\n", (map Lisp::Printer::print($_), @_), "")});
+symbol("write")->function(sub{print join("\n", (map lisp_print($_), @_), "")});
 
 
 1;

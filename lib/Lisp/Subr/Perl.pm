@@ -27,10 +27,11 @@ for (qw(sin cos rand srand exp log sqrt int hex oct abs ord chr
     push(@code, qq(symbol("$_")->function(sub { \@_==0?$_:$_ \$_[0] });\n));
 }
 
-# .... more comes
-
 print join("", @code) if $DEBUG;
 eval join("", @code);
 die $@ if $@;
+
+# some additional stuff
+symbol("perl-eval")->function(sub { eval $_[0] });
 
 1;

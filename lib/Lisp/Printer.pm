@@ -1,8 +1,15 @@
 package Lisp::Printer;
 
+use strict;
+use vars qw(@EXPORT_OK);
+
 use Lisp::Symbol qw(symbolp);
 use Lisp::Vector qw(vectorp);
 use Lisp::Cons   qw(consp);
+
+require Exporter;
+*import = \&Exporter::import;
+@EXPORT_OK = qw(lisp_print);
 
 sub dump
 {
@@ -10,7 +17,7 @@ sub dump
     Data::Dumper::Dumper($_[0]);
 }
 
-sub print
+sub lisp_print
 {
     my $obj = shift;
     my $str = "";
@@ -18,17 +25,17 @@ sub print
 	if (symbolp($obj)) {
 	    $str = $obj->name;
 	} elsif (vectorp($obj)) {
-	    $str = "[" . join(" ", map Lisp::Printer::print($_), @$obj) . "]";
+	    $str = "[" . join(" ", map lisp_print($_), @$obj) . "]";
 	} elsif (consp($obj)) {
-	    $str = "(" .join(" . ", map Lisp::Printer::print($_), @$obj). ")";
+	    $str = "(" .join(" . ", map lisp_print($_), @$obj). ")";
 	} elsif (ref($obj) eq "ARRAY") {
-	    $str = "(" . join(" ", map Lisp::Printer::print($_), @$obj) . ")";
+	    $str = "(" . join(" ", map lisp_print($_), @$obj) . ")";
 	} elsif (ref($obj) eq "HASH") {
 	    # make it into an alist
 	    $str = "(" . join("",
-			      map {"(" . Lisp::Printer::print($_) .
+			      map {"(" . lisp_print($_) .
                                          " . " .
-					 Lisp::Printer::print($obj->{$_}) .
+					 lisp_print($obj->{$_}) .
                                     ")"
 				  } sort keys %$obj) .
                    ")";

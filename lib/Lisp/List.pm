@@ -22,14 +22,14 @@ sub print
 {
     my $self = shift;
     require Lisp::Printer;
-    Lisp::Printer::print($self);
+    Lisp::Printer::lisp_print($self);
 }
 
 sub eval
 {
     my $self = shift;
     require Lisp::Interpreter;
-    Lisp::Interpreter::eval($self);
+    Lisp::Interpreter::lisp_eval($self);
 }
 
 1;

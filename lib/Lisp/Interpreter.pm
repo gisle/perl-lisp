@@ -1,10 +1,14 @@
 package Lisp::Interpreter;
 
 use strict;
-use vars qw($DEBUG);
+use vars qw($DEBUG @EXPORT_OK);
 
-use Lisp::Symbol qw(symbol symbolp);
-require Lisp::Subr::Core;
+use Lisp::Symbol  qw(symbol symbolp);
+use Lisp::Printer qw(lisp_print);
+
+require Exporter;
+*import = \&Exporter::import;
+@EXPORT_OK = qw(lisp_eval);
 
 my $macro  = symbol("macro");
 my $lambda = symbol("lambda");
@@ -16,13 +20,13 @@ my $rest   = symbol("&rest");
 
 my $evalno = 0;
 
-sub eval
+sub lisp_eval
 {
     my $form = shift;
     my $no = ++$evalno;
     
     if ($DEBUG) {
-	print "eval $evalno ", Lisp::Printer::print($form), "\n";
+	print "lisp_eval $evalno ", lisp_print($form), "\n";
     }
 
     return $form unless ref($form);  # a string or a number
@@ -49,7 +53,7 @@ sub eval
 		if (symbolp($_)) {
 		    $_ = $_->value;
 		} elsif (ref($_) eq "ARRAY") {
-		    $_ = Lisp::Interpreter::eval($_);
+		    $_ = lisp_eval($_);
 		} else {
 		    # leave it as it is
 		}
@@ -64,15 +68,15 @@ sub eval
 	if ($func->[0] == $lambda) {
 	    $res = lambda($func, \@args)
 	} else {
-	    my $str = Lisp::Printer::print($func);
+	    my $str = lisp_print($func);
 	    die "invalid-list-function ($str)";
 	}
     } else {
-	my $str = Lisp::Printer::print($func);
+	my $str = lisp_print($func);
 	die "invalid-function ($str)";
     }
     if ($DEBUG) {
-	my $str = Lisp::Printer::print($res);
+	my $str = lisp_print($res);
 	print " $no ==> $str\n";
     }
     $res;
@@ -114,7 +118,7 @@ sub lambda  # calling a lambda expression
     my $res = $nil;
     my $pc = 2;  # starting here (0=lambda, 1=local variables)
     while ($pc < @$lambda) {
-	$res = Lisp::Interpreter::eval($lambda->[$pc]);
+	$res = lisp_eval($lambda->[$pc]);
 	$pc++;
     }
     $res;

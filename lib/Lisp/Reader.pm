@@ -1,16 +1,21 @@
 package Lisp::Reader;
 
 use strict;
-use vars qw($DEBUG $SYMBOLS_AS_STRINGS);
+use vars qw($DEBUG $SYMBOLS_AS_STRINGS @EXPORT_OK);
 
 use Lisp::Symbol qw(symbol);
+
+require Exporter;
+*import = \&Exporter::import;
+@EXPORT_OK = qw(lisp_read);
+
 
 sub my_symbol
 {
     $SYMBOLS_AS_STRINGS ? $_[0] : symbol($_[0]);
 }
 
-sub read
+sub lisp_read
 {
     local($_) = shift;
     my $one   = shift;
@@ -58,8 +63,7 @@ sub read
 	} elsif (/\G\s*\'/gc) {
 	    print "${indent}QUOTE\n" if $DEBUG;
 	    my $old_pos = pos($_);
-	    my($subform, $pos) = Lisp::Reader::read(substr($_, $old_pos), 1,
-						    $level+1);
+	    my($subform, $pos) = lisp_read(substr($_, $old_pos), 1, $level+1);
 	    pos($_) = $old_pos + $pos;
 	    push(@$form, [my_symbol("quote"), $subform]);
 	    last if $one && !@stack;
