@@ -8,7 +8,7 @@ Gnus::Newsrc - parse ~/.newsrc.eld files
 
   $newsrc = Gnus::Newsrc->new;
   ($level, $read, $marks, $server, $group_para) =
-     @{$newsrc->alish_hash->{"comp.lang.perl.misc"}};
+     @{$newsrc->alist_hash->{"comp.lang.perl.misc"}};
 
 =head1 DESCRIPTION
 
