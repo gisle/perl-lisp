@@ -27,14 +27,14 @@ $res = run(<<'EOT');
 (setq c 3)
 
 (and (setq a 4) (setq b nil) (setq c 33))
-(setq ok1 (and (= a 4) (= b nil) (= c 3)))
+(setq ok1 (and (= a 4) (null b) (= c 3)))
 
 (setq a 1)
 (setq b 2)
 (setq c 3)
 
 (setq c (or (setq a nil) (setq b 0)))
-(setq ok2 (and (= a nil) (= b 0) (= c 0)))
+(setq ok2 (and (null a) (= b 0) (= c 0)))
 
 (if (= 3 3) (setq ok3 t) (setq ok3 nil))
 (setq ok5 nil)
