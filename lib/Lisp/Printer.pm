@@ -1,7 +1,9 @@
 package Lisp::Printer;
 
 use strict;
-use vars qw(@EXPORT_OK);
+use vars qw(@EXPORT_OK $VERSION);
+
+$VERSION = sprintf("%d.%02d", q$Revision$ =~ /(\d+)\.(\d+)/);
 
 use Lisp::Symbol qw(symbolp);
 use Lisp::Vector qw(vectorp);

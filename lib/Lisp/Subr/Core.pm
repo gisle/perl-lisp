@@ -3,6 +3,10 @@ package Lisp::Subr::Core;
 # implements the core subrs
 
 use strict;
+use vars qw($VERSION);
+
+$VERSION = sprintf("%d.%02d", q$Revision$ =~ /(\d+)\.(\d+)/);
+
 use Lisp::Symbol      qw(symbol);
 use Lisp::Special     qw(make_special);
 use Lisp::Reader      qw(lisp_read);
