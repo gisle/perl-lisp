@@ -69,16 +69,13 @@ sub lisp_eval
 	if ($func->[0] == $lambda) {
 	    $res = lambda($func, \@args)
 	} else {
-	    my $str = lisp_print($func);
-	    die "invalid-list-function ($str)";
+	    die "invalid-list-function (@{[lisp_print($func)]})";
 	}
     } else {
-	my $str = lisp_print($func);
-	die "invalid-function ($str)";
+	die "invalid-function (@{[lisp_print($func)]})";
     }
     if ($DEBUG) {
-	my $str = lisp_print($res);
-	print " $no ==> $str\n";
+	print " $no ==> @{[lisp_print($res)]}\n";
     }
     $res;
 }
