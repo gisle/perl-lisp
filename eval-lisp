@@ -1,9 +1,25 @@
 #!/usr/bin/perl -w
 
+BEGIN { $Lisp::Eval::DEBUG++; }
+
 use Lisp::Reader;
 use Lisp::Printer;
 use Lisp::Eval;
+use Lisp::Symbol qw(symbol);
 
-my $form = Lisp::Reader::read(join(" ", @ARGV));
+if (@ARGV && $ARGV[0] eq "-f") {
+    shift;
+    die "-f requires a filename as argument" unless @ARGV;
+    $text = `cat $ARGV[0]`;
+} else {
+    $text = "@ARGV";
+}
+
+
+my $form = Lisp::Reader::read($text);
+unshift(@$form, symbol("progn")) if ref($form->[0]) eq "ARRAY";
+
+#print Lisp::Printer::print($form), "\n";
+
 my $res = Lisp::Eval::eval($form);
 print Lisp::Printer::print($res), "\n";
