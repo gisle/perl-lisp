@@ -14,10 +14,16 @@ my $nil    = symbol("nil");
 my $opt    = symbol("&optional");
 my $rest   = symbol("&rest");
 
+my $evalno = 0;
+
 sub eval
 {
     my $form = shift;
-    print "EVAL: ", Lisp::Printer::print($form), "\n" if $DEBUG;
+    my $no = ++$evalno;
+    
+    if ($DEBUG) {
+	print "eval $evalno ", Lisp::Printer::print($form), "\n";
+    }
 
     return $form unless ref($form);  # a string or a number
     return $form->value if symbolp($form);
@@ -64,6 +70,10 @@ sub eval
     } else {
 	my $str = Lisp::Printer::print($func);
 	die "invalid-function ($str)";
+    }
+    if ($DEBUG) {
+	my $str = Lisp::Printer::print($res);
+	print " $no ==> $str\n";
     }
     $res;
 }
