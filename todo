@@ -1,22 +1,20 @@
+Implement macros.
+
 Lisp::String for strings while numbers are plain scalars.  This might
 also be an Lisp::Reader option.
 
-Implement conditional special forms.
-
-Implement macros.
-
 Pretty-Printer version of Lisp::Printer::print
 
-Reading '#<...>' is an error
+Reading (a b . c) should work
 
 Full character recognition ?^c ?\M-a ?\C-M-a (also in strings)
 
-Figure out how to call perl builtins in array context from Lisp.
-
 Complete binding of perl builtins.
+
+Figure out how to call perl builtins in array context from Lisp.
 
 Tie some symbols to perl variables.  (setq _ 10)
 
-() and nil represented as undef ??
+() and nil always represented as undef ??
 
 Documentation
