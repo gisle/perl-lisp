@@ -3,6 +3,6 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
     NAME	 => 'perl-lisp',
-    VERSION      => '0.04',
+    VERSION      => '0.05',
     dist         => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
 );
