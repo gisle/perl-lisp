@@ -102,3 +102,24 @@ print "not " unless @$form == 1 &&
                     vectorp($form->[0]) &&
                     @{$form->[0]} == 4;
 print "ok 8\n";
+
+$form = lisp_read(q(?a ?\a ?\r ?\n ?x ?\x ?\C-m ?\C-M ?\^m ?\^M ?\015
+                    "f\M-erep\370lse" "fo\
+o" ?\M-\H-\C-X
+                   ));
+print lisp_print($form), "\n";
+print "not " unless $form->[0] == 97 &&
+                    $form->[1] == 7 &&
+                    $form->[2] == 13 &&
+                    $form->[3] == 10 &&
+                    $form->[4] == 120 &&
+                    $form->[5] == 120 &&
+                    $form->[6] == 13 &&
+                    $form->[7] == 13 &&
+                    $form->[8] == 13 &&
+                    $form->[9] == 13 &&
+                    $form->[10] == 13 &&
+	            $form->[11] eq "fårepølse" &&
+	            $form->[12] eq "foo" &&
+                    1;
+print "ok 9\n";
