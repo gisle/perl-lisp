@@ -27,7 +27,7 @@ sub read
     }
     
     while (1) {
-	if (/\G\s*;+\s*(.*)/gc) {
+	if (/\G\s*;+([^\n]*)/gc) {
 	    print "${indent}COMMENT $1\n" if $DEBUG;
 	} elsif (/\G\s*([()\[\]])/gc) {
 	    print "${indent}PARA $1\n" if $DEBUG;
