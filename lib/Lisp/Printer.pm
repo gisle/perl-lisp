@@ -21,8 +21,19 @@ sub print
 	    $str = "[" . join(" ", map Lisp::Printer::print($_), @$obj) . "]";
 	} elsif (consp($obj)) {
 	    $str = "(" .join(" . ", map Lisp::Printer::print($_), @$obj). ")";
-	} else {
+	} elsif (ref($obj) eq "ARRAY") {
 	    $str = "(" . join(" ", map Lisp::Printer::print($_), @$obj) . ")";
+	} elsif (ref($obj) eq "HASH") {
+	    # make it into an alist
+	    $str = "(" . join("",
+			      map {"(" . Lisp::Printer::print($_) .
+                                         " . " .
+					 Lisp::Printer::print($obj->{$_}) .
+                                    ")"
+				  } sort keys %$obj) .
+                   ")";
+	} else {
+	    $str = "#<$obj>";
 	}
     } else {
 	# XXX: need real number/string type info
