@@ -1,6 +1,6 @@
 ;; 
 ;; You can evaluate this file with:
-;;    ./eval-lisp eg.lisp
+;;    ./eval-lisp -f eg.lisp
 ;;
 
 
