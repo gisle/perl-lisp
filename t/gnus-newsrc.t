@@ -6,9 +6,9 @@ if (-f "newsrc.eld") {
 }
 
 use strict;
-use Gnus::Newsrc_eld;
+use Gnus::Newsrc;
 
-my $newsrc = Gnus::Newsrc_eld->new("newsrc.eld");
+my $newsrc = Gnus::Newsrc->new("newsrc.eld");
 
 print "not " unless $newsrc->file_version eq "Gnus v5.5";
 print "ok 1\n";
@@ -18,18 +18,16 @@ print "ok 2\n";
 
 my $alist = $newsrc->alist;
 
-my %ahash;
+my @groups;
 for (@$alist) {
-    # my($group,$level,$read,$marks,$server,$para) = @$_;
-    my $group = shift @$_;
-    print "$group\n";
-    $ahash{$group} = $_;
+   push(@groups, $_->[0]);
 }
+#print "@groups\n";
 
-print "not " unless exists $ahash{"nnml+private:mail.perl"};
+print "not " unless join(",", @groups) eq "comp.arch,comp.infosystems.www.authoring.cgi,comp.lang.c++.moderated,comp.lang.c.moderated,comp.lang.perl.announce,nnml+private:mail.perl,comp.lang.perl.misc,comp.lang.perl.modules,comp.lang.perl.tk,comp.lang.python";
 print "ok 3\n";
 
-my $p5p = $ahash{"nnml+private:mail.perl"};
+my $p5p = $newsrc->alist_hash->{"nnml+private:mail.perl"};
 print "not " unless $p5p->[0] == 2 &&
                     $p5p->[1] eq "1-3667" &&
                     $p5p->[4]{'to-list'} eq "perl5-porters\@perl.org";
