@@ -5,7 +5,7 @@ README
 dump-lisp
 eg.lisp
 eval-lisp
-lib/Gnus/Newsrc_eld.pm
+lib/Gnus/Newsrc.pm
 lib/Lisp/Cons.pm
 lib/Lisp/Interpreter.pm
 lib/Lisp/List.pm
