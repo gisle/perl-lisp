@@ -1,14 +1,21 @@
 package Lisp::Symbol;
 use strict;
-use vars qw(@EXPORT_OK);
+use vars qw(@EXPORT_OK %obarray);
 
+require Carp;
 require Exporter;
 *import = \&Exporter::import;
 @EXPORT_OK = qw(symbol symbolp);
 
 #use overload '""' => \&name;
 
-my %obarray;
+%obarray = ();
+
+my $t = symbol("t");
+$t->value($t);
+
+my $nil = symbol("nil");
+$nil->value(undef);
 
 sub symbol
 {
@@ -35,22 +42,22 @@ sub name
 sub value
 {
     my $self = shift;
-    if (defined(wantarray) || !exists $self->{'value'}) {
-	die "Symbol's value as variable is void";
+    if (defined(wantarray) && !exists $self->{'value'}) {
+	Carp::croak("Symbol's value as variable is void ($self->{'name'})");
     }
     my $old = $self->{'value'};
-    $self->{'value'} = shift if $@;
+    $self->{'value'} = shift if @_;
     $old;
 }
 
 sub function
 {
     my $self = shift;
-    if (defined(wantarray) || !exists $self->{'function'}) {
-	die "Symbol's value as function is void";
+    if (defined(wantarray) && !exists $self->{'function'}) {
+	Carp::croak("Symbol's value as function is void ($self->{'name'})");
     }
     my $old = $self->{'function'};
-    $self->{'function'} = shift if $@;
+    $self->{'function'} = shift if @_;
     $old;
 }
 
@@ -58,7 +65,7 @@ sub plist
 {
     my $self = shift;
     my $old = $self->{'plist'};
-    $self->{'plist'} = shift if $@;
+    $self->{'plist'} = shift if @_;
     $old;
 }
 
