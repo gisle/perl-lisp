@@ -1,6 +1,6 @@
 ;; 
 ;; You can evaluate this file with:
-;;    ./eval-lisp -f eg.lisp
+;;    ./eval-lisp -d -f eg.lisp
 ;;
 
 
@@ -15,4 +15,8 @@
 (write (ord "a"))
 (write (chr ?a))
 
-(write (localtime (- (time) (* 24 60 60))))
+(write "Yesterday was:" (localtime (- (time) (* 24 60 60))))
+
+(setq pid (perl-eval "$$"))
+
+(list "Good bye")

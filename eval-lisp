@@ -1,27 +1,34 @@
 #!/usr/bin/perl -w
 
-BEGIN { $Lisp::Interpreter::DEBUG++; }
+use Lisp::Reader      qw(lisp_read);
+use Lisp::Printer     qw(lisp_print);
+use Lisp::Interpreter qw(lisp_eval);
+use Lisp::Symbol      qw(symbol);
 
-use Lisp::Reader;
-use Lisp::Printer;
-use Lisp::Interpreter;
-use Lisp::Symbol qw(symbol);
+use Lisp::Subr::All;  # make builtins available
 
-use Lisp::Subr::Perl;  # make perl builtins available
+use Getopt::Std;
+use vars qw($opt_d $opt_f);
 
-if (@ARGV && $ARGV[0] eq "-f") {
-    shift;
-    die "-f requires a filename as argument" unless @ARGV;
-    $text = `cat $ARGV[0]`;
-} else {
-    $text = "@ARGV";
+unless (getopts("df:")) {
+    $0 =~ s,.*/,,;
+    die "Usage: $0 [-d] [-f <file>] <forms>...\n";
 }
 
+$Lisp::Interpreter::DEBUG++ if $opt_d;
 
-my $form = Lisp::Reader::read($text);
+
+$text = "";
+$text = `cat $opt_f` if $opt_f;
+
+if (@ARGV) {
+    $text .= "@ARGV";
+}
+
+my $form = lisp_read($text);
 unshift(@$form, symbol("progn")) if ref($form->[0]) eq "ARRAY";
 
-#print Lisp::Printer::print($form), "\n";
+#print lisp_print($form), "\n";
 
-my $res = Lisp::Interpreter::eval($form);
-print Lisp::Printer::print($res), "\n";
+my $res = lisp_eval($form);
+print lisp_print($res), "\n";
