@@ -46,15 +46,29 @@ sub lisp_read
 		$form = pop(@stack);
 		last if $one && !@stack;
 	    }
-	} elsif (/\G\s*([-+]?\d+(\.\d*)?)/gc) {  # XXX 3e4
+	} elsif (/\G\s*(
+			[-+]?                  # optional sign
+			(?:\d+(\.\d*)?         # 0 0. 0.0
+			 |
+			 \.\d+)                # .0
+			([eE][-+]?\d+)?        # optional exponent
+		       )
+		 (?![^\s()\[\];])              # not followed by plain chars
+		 /gcx)  
+	{
 	    print "${indent}NUMBER $1\n" if $DEBUG;
-	    push(@$form, $1);
+	    push(@$form, $1+0);
 	    last if $one && !@stack;
 	} elsif (/\G\s*\?([^\\])/gc) {
 	    print "${indent}CHAR $1\n" if $DEBUG;
 	    push(@$form, ord($1));
 	    last if $one && !@stack;
-	} elsif (/\G\s*\"([^\"\\]*(?:\\.[^\"\\]*)*)\"/gc) {
+	} elsif (/\G\s*
+		 \"(                           # start quote
+		    [^\"\\]*                   # unescaped
+		    (?:\\.[^\"\\]*)*           # (escaped char + unescaped)*
+		 )\"/gcx)                      # end quote
+	{
 	    my $str = $1;
 	    $str =~ s/\\(.)/$1/g;
 	    print "${indent}STRING $str\n" if $DEBUG;
@@ -69,13 +83,26 @@ sub lisp_read
 	    last if $one && !@stack;
 	} elsif (/\G\s*\./gc) {
 	    print "${indent}DOT\n" if $DEBUG;
+	    #XXX Should handle (a b . c) correctly and (a . b c) as error
 	    bless $form, "Lisp::Cons";
-	} elsif (/\G\s*([^\s()\[\];]+)/gc) {
-	    print "${indent}SYMBOL $1\n" if $DEBUG;
-	    push(@$form, my_symbol($1));
+	} elsif (/\G\s*\#/gc) {
+	    die qq(invalid-read-syntax: "\#");
+	} elsif (/\G\s*
+                   (  [^\s()\[\];\\]*          # unescaped plain chars
+                      (?:\\.[^\s()\[\];\\]*)*  # (escaped char + unescaped)*
+                   )/gcx
+		 && length($1))
+	{
+	    # symbols can have space and parentesis embedded if they are
+	    # escaped.
+	    my $sym = $1;
+	    $sym =~ s/\\(.)/$1/g; # unescape
+	    print "${indent}SYMBOL $sym\n" if $DEBUG;
+	    push(@$form, my_symbol($sym));
 	    last if $one && !@stack;
 	} elsif (/\G\s*(.)/gc) {
 	    print "${indent}? $1\n";
+	    die qq(invalid-read-syntax: "$1");
 	} else {
 	    last;
 	}
