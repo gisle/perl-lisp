@@ -12,6 +12,8 @@ lib/Lisp/Printer.pm
 lib/Lisp/Reader.pm
 lib/Lisp/Special.pm
 lib/Lisp/String.pm
+lib/Lisp/Subr/Core.pm
+lib/Lisp/Subr/Perl.pm
 lib/Lisp/Symbol.pm
 lib/Lisp/Vector.pm
 t/reader.t
