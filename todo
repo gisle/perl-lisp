@@ -1,0 +1,17 @@
+() and nil represented as undef
+
+Lisp::String for strings while numbers are plain scalars.  This might
+also be an Lisp::Reader option.
+
+Lisp::Eval, Lisp::Environment.
+
+Pretty-Printer
+
+Reading '#<...>' is an error
+
+Full character recognition ?^c ?\M-a ?\C-M-a
+
+Full Lisp::Symbol implementation (slots for variable, function,...)
+
+Stringify and comparison overloading for Lisp::-objects.
+
