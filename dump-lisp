@@ -1,0 +1,23 @@
+#!/usr/bin/perl -w
+
+# Try 'dump-lisp ~/.emacs' or something like that
+
+use Lisp::Reader;
+use Lisp::Printer;
+
+if (@ARGV && $ARGV[0] eq "-d") {
+    shift;
+    $dump++;
+}
+
+#$Lisp::Reader::SYMBOLS_AS_STRINGS++;
+#$Lisp::Reader::DEBUG++;
+
+my $file = shift || die "Usage: $0 <file>\n";
+$lisp = `cat $file`;
+
+
+my $form = Lisp::Reader::read($lisp);
+
+print $dump ? Lisp::Printer::dump($form) : Lisp::Printer::print($form), "\n";
+
