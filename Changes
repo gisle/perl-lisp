@@ -1,3 +1,17 @@
+1997-10-17   Gisle Aas <aas@sn.no>
+
+   Release 0.02
+
+   Comment parsing fix from <Erik.Assum@tech.scandinaviaonline.se>
+
+   Main functions renamed as lisp_read(), lisp_print() and lisp_eval()
+
+   (perl-eval "some perl expression")
+
+   New options to 'dump-lisp' and 'eval-lisp'
+
+
+
 1997-10-16   Gisle Aas <aas@sn.no>
 
    Release 0.01
