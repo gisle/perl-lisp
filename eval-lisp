@@ -7,6 +7,8 @@ use Lisp::Printer;
 use Lisp::Interpreter;
 use Lisp::Symbol qw(symbol);
 
+use Lisp::Subr::Perl;  # make perl builtins available
+
 if (@ARGV && $ARGV[0] eq "-f") {
     shift;
     die "-f requires a filename as argument" unless @ARGV;
