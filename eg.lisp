@@ -16,7 +16,11 @@
 (write (chr ?a))
 
 (write "Yesterday was:" (localtime (- (time) (* 24 60 60))))
-
 (setq pid (perl-eval "$$"))
+
+(setq a 10)
+(while (not (zerop a))
+  (write a)
+  (setq a (1- a)))
 
 (list "Good bye")
