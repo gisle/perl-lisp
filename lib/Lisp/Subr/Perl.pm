@@ -3,7 +3,9 @@ package Lisp::Subr::Perl;
 # Make many perl functions available in the lisp envirionment
 
 use strict;
-use vars qw($DEBUG);
+use vars qw($DEBUG $VERSION);
+
+$VERSION = sprintf("%d.%02d", q$Revision$ =~ /(\d+)\.(\d+)/);
 
 use Lisp::Symbol qw(symbol);
 

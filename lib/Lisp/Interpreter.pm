@@ -1,7 +1,9 @@
 package Lisp::Interpreter;
 
 use strict;
-use vars qw($DEBUG @EXPORT_OK);
+use vars qw($DEBUG @EXPORT_OK $VERSION);
+
+$VERSION = sprintf("%d.%02d", q$Revision$ =~ /(\d+)\.(\d+)/);
 
 use Lisp::Symbol  qw(symbol symbolp);
 use Lisp::Printer qw(lisp_print);

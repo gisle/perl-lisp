@@ -1,6 +1,8 @@
 package Lisp::Symbol;
 use strict;
-use vars qw(@EXPORT_OK %obarray);
+use vars qw(@EXPORT_OK %obarray $VERSION);
+
+$VERSION = sprintf("%d.%02d", q$Revision$ =~ /(\d+)\.(\d+)/);
 
 require Carp;
 require Exporter;
