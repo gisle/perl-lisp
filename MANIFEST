@@ -19,5 +19,10 @@ lib/Lisp/Subr/Core.pm
 lib/Lisp/Subr/Perl.pm
 lib/Lisp/Symbol.pm
 lib/Lisp/Vector.pm
+t/arith.t
+t/bool.t
+t/defun.t
+t/loop.t
+t/printer.t
 t/reader.t
 todo
