@@ -21,4 +21,4 @@ Try: ./eval-lisp ~/.emacs  :-)
 All code in this package is experimental and the interfaces can change
 at any time.
 
-Copyright 1995-1997 Gisle Aas.  <gisle@aas.no>
+Copyright 1997 Gisle Aas.  <gisle@aas.no>
