@@ -1,7 +1,10 @@
+Changes
 MANIFEST
 Makefile.PL
 README
 dump-lisp
+eg.el
+eg.lisp
 eval-lisp
 lib/Gnus/Newsrc_eld.pm
 lib/Lisp/Cons.pm

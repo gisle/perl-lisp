@@ -16,6 +16,8 @@ representation of it.  And then it was just a matter of a little
 programming to turn on evaluation of these objects and a minimal Lisp
 environment was born.
 
+Try: ./eval-lisp ~/.emacs  :-)
+
 All code in this package is experimental and the interfaces can change
 at any time.
 
