@@ -5,9 +5,7 @@ also be an Lisp::Reader option.
 
 Pretty-Printer version of Lisp::Printer::print
 
-Reading (a b . c) should work
-
-Full character recognition ?^c ?\M-a ?\C-M-a (also in strings)
+Reading (a b . c) should work, also (a . nil)
 
 Complete binding of perl builtins.
 
@@ -15,6 +13,6 @@ Figure out how to call perl builtins in array context from Lisp.
 
 Tie some symbols to perl variables.  (setq _ 10)
 
-() and nil always represented as undef ??
+Readonly symbols: t nil
 
 Documentation
