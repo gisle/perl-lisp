@@ -1,3 +1,15 @@
+1997-10-24   Gisle Aas <aas@sn.no>
+
+   Release 0.05
+
+   The 'dump-lisp' utility use options in the same way as 'eval-lisp'
+
+   Removed "_eld" from the Gnus::Newsrc module name.
+
+   Added documentation to Gnus::Newsrc alist_hash() method.
+
+
+
 1997-10-19   Gisle Aas <aas@sn.no>
 
    Release 0.04
