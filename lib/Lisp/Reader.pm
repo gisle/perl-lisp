@@ -1,10 +1,14 @@
 package Lisp::Reader;
 
 use strict;
-use vars qw($DEBUG);
+use vars qw($DEBUG $SYMBOLS_AS_STRINGS);
 
 use Lisp::Symbol qw(symbol);
-#sub symbol { $_[0] }   # useful while debugging
+
+sub my_symbol
+{
+    $SYMBOLS_AS_STRINGS ? $_[0] : symbol($_[0]);
+}
 
 sub read
 {
@@ -25,20 +29,25 @@ sub read
     while (1) {
 	if (/\G\s*;+\s*(.*)/gc) {
 	    print "${indent}COMMENT $1\n" if $DEBUG;
-	} elsif (/\G\s*([()])/gc) {
+	} elsif (/\G\s*([()\[\]])/gc) {
 	    print "${indent}PARA $1\n" if $DEBUG;
-	    if ($1 eq "(") {
+	    if ($1 eq "(" or $1 eq "[") {
 		my $prev = $form;
 		push(@stack, $prev);
 		push(@$prev, $form = []);
+		bless $form, "Lisp::Vector" if $1 eq "[";
 	    } else {
 		last unless @stack;
 		$form = pop(@stack);
 		last if $one && !@stack;
 	    }
-	} elsif (/\G\s*([-+]?\d+(\.\d*)?)/gc) {  #
+	} elsif (/\G\s*([-+]?\d+(\.\d*)?)/gc) {  # XXX 3e4
 	    print "${indent}NUMBER $1\n" if $DEBUG;
 	    push(@$form, $1);
+	    last if $one && !@stack;
+	} elsif (/\G\s*\?([^\\])/gc) {
+	    print "${indent}CHAR $1\n" if $DEBUG;
+	    push(@$form, ord($1));
 	    last if $one && !@stack;
 	} elsif (/\G\s*\"([^\"\\]*(?:\\.[^\"\\]*)*)\"/gc) {
 	    my $str = $1;
@@ -52,19 +61,25 @@ sub read
 	    my($subform, $pos) = Lisp::Reader::read(substr($_, $old_pos), 1,
 						    $level+1);
 	    pos($_) = $old_pos + $pos;
-	    push(@$form, [symbol("quote"), $subform]);
+	    push(@$form, [my_symbol("quote"), $subform]);
 	    last if $one && !@stack;
 	} elsif (/\G\s*\./gc) {
 	    print "${indent}DOT\n" if $DEBUG;
-	} elsif (/\G\s*([^\s();]+)/gc) {
+	    bless $form, "Lisp::Cons";
+	} elsif (/\G\s*([^\s()\[\];]+)/gc) {
 	    print "${indent}SYMBOL $1\n" if $DEBUG;
-	    push(@$form, symbol($1));
+	    push(@$form, my_symbol($1));
 	    last if $one && !@stack;
 	} elsif (/\G\s*(.)/gc) {
 	    print "${indent}? $1\n";
 	} else {
 	    last;
 	}
+    }
+
+    if (@stack) {
+	warn "Form terminated early";  # or should we die?
+	$form = $stack[0];
     }
 
     if ($one) {
