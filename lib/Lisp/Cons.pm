@@ -3,6 +3,23 @@ package Lisp::Cons;
 # Only used to represent (a . b) cons cells.  The normal
 # (a b c d) list is represented with a unblessed array [a,b,c,d]
 
+use strict;
+use vars qw(@EXPORT_OK);
+
+require Exporter;
+*import = \&Exporter::import;
+@EXPORT_OK = qw(cons consp);
+
+sub cons
+{
+    Lisp::Cons->new(@_);
+}
+
+sub consp
+{
+    UNIVERSAL::isa($_[0], "Lisp::Cons");
+}
+
 sub new
 {
     my($class, $car, $cdr) = @_;
