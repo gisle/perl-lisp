@@ -1,5 +1,20 @@
 1997-10-17   Gisle Aas <aas@sn.no>
 
+   Release 0.03
+
+   Reader recognize more float numbers and symbols with escaped chars
+
+   Implemented the following subrs:
+
+       car cdr
+       if cond not null and or while
+       floatp integerp numberp zerop
+       = /? < <= > >= 1+ 1- / % min max
+
+
+
+1997-10-17   Gisle Aas <aas@sn.no>
+
    Release 0.02
 
    Comment parsing fix from <Erik.Assum@tech.scandinaviaonline.se>
