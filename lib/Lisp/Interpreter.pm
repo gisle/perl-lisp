@@ -5,6 +5,7 @@ use vars qw($DEBUG @EXPORT_OK);
 
 use Lisp::Symbol  qw(symbol symbolp);
 use Lisp::Printer qw(lisp_print);
+use Lisp::Special qw(specialp);
 
 require Exporter;
 *import = \&Exporter::import;
@@ -46,7 +47,7 @@ sub lisp_eval
 	}
     }
 
-    unless (UNIVERSAL::isa($func, "Lisp::Special") || $func == $macro) {
+    unless (specialp($func) || $func == $macro) {
 	# evaluate all arguments
 	for (@args) {
 	    if (ref($_)) {
@@ -62,7 +63,7 @@ sub lisp_eval
     }
 
     my $res;
-    if (ref($func) eq "CODE" || UNIVERSAL::isa($func, "Lisp::Special")) {
+    if (UNIVERSAL::isa($func, "CODE")) {
 	$res = &$func(@args);
     } elsif (ref($func) eq "ARRAY") {
 	if ($func->[0] == $lambda) {
