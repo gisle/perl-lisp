@@ -1,4 +1,4 @@
-package Gnus::Newsrc_eld;
+package Gnus::Newsrc;
 
 use strict;
 use vars qw($VERSION);
@@ -6,7 +6,6 @@ use vars qw($VERSION);
 $VERSION = sprintf("%d.%02d", q$Revision$ =~ /(\d+)\.(\d+)/);
 
 use Lisp::Reader qw(lisp_read);
-use Lisp::Symbol qw(symbol symbolp);
 
 
 sub new
@@ -17,46 +16,43 @@ sub new
     open(LISP, $file) || die "Can't open $file: $!";
     my $lisp = <LISP>;
     close(LISP);
+
+    local $Lisp::Reader::SYMBOLS_AS_STRINGS = 1;  # gives quicker parsing
     my $form = lisp_read($lisp);
 
     my $self = bless {}, $class;
 
-    my $setq  = symbol("setq");
-    my $quote = symbol("quote");
-
     for (@$form) {
 	my($one,$two,$three) = @$_;
 	#print join(" - ", map {$_->name} $one, $two), "\n";
-	if ($one == $setq && symbolp($two)) {
+	if ($one eq "setq") {
 	    if (ref($three) eq "ARRAY") {
 		my $first = $three->[0];
-		if (symbolp($first) && $first == $quote) {
+		if ($first eq "quote") {
 		    $three = $three->[1];
 		}
 	    }
-	    $self->{$two->name} = $three;
+	    $self->{$two} = $three;
 	} else {
 	    warn "$_ does not start with (setq symbo ...)\n";
 	}
     }
 
-    my $nil = symbol("nil");
     # make the 'gnus-newsrc-alist' into a more perl suitable structure
     for (@{$self->{'gnus-newsrc-alist'}}) {
 	my($group, $level, $read, $marks, $server, $para) = @$_;
 
 	for ($read, $marks, $para) {
-	    $_ = [] if !defined($_) || $_ == $nil;
+	    $_ = [] unless defined;
 	}
 	$_->[2] = join(",", map {ref($_)?"$_->[0]-$_->[1]":$_} @$read);
 	$_->[3] = @$marks ?
-                     { map {shift(@$_)->name =>
+                     { map {shift(@$_) =>
 		            join(",", map {ref($_)?"$_->[0]-$_->[1]":$_}@$_)}
                       @$marks
                      }
                   : undef;
-        $_->[4] = undef if defined($server) && $server == $nil;
-	$_->[5] = @$para ? { map { $_->[0]->name, $_->[1] } @$para } : undef;
+	$_->[5] = @$para ? { map { $_->[0] => $_->[1] } @$para } : undef;
 
 	# trim trailing undef values
 	pop(@$_) until defined($_->[-1]) || @$_ == 0;
@@ -78,6 +74,21 @@ sub last_checked_date
 sub alist
 {
     shift->{"gnus-newsrc-alist"};
+}
+
+sub alist_hash
+{
+    my $self = shift;
+    unless ($self->{'_alist_hash'}) {
+	my %ahash;
+	$self->{'_alist_hash'} = \%ahash;
+	for (@{$self->alist}) {
+	    my @groupinfo = @$_;
+	    my $group = shift @groupinfo;
+	    $ahash{$group} = \@groupinfo;
+	}
+    }
+    $self->{'_alist_hash'};
 }
 
 sub server_alist
