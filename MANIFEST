@@ -1,9 +1,17 @@
 MANIFEST
 Makefile.PL
+README
+dump-lisp
+eval-lisp
 lib/Gnus/Newsrc_eld.pm
 lib/Lisp/Cons.pm
+lib/Lisp/Interpreter.pm
+lib/Lisp/List.pm
+lib/Lisp/Localize.pm
 lib/Lisp/Printer.pm
 lib/Lisp/Reader.pm
+lib/Lisp/Special.pm
+lib/Lisp/String.pm
 lib/Lisp/Symbol.pm
 lib/Lisp/Vector.pm
 t/reader.t
